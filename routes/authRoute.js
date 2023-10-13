@@ -37,60 +37,17 @@ route.post("/login", async (req, res) =>{
     const token = jwt.sign({
         fullName:userDetail.fullName,
         userName: userDetail.userName,
-        //userId: userDetail._id,
         role: userDetail.role
     }, process.env.SECRET);
 
     res.send({
         message: `${req.body.userName} logged in.`,
         token,
-        //userDetail
     });
 });
 
 
-route.use(isUserLoggedIn);
-// route for user to check their profile
-
-route.get("/profile",  async(req, res ) =>{
-    try {
-        const user = await userCollection.findById(req.decoded.userId, "fullName userName");
-        res.send(user);
-        
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("internal-server-error");
-        
-    }
-
-});
-
-// get all registered users
-
-route.get("/users", async(req,res) =>{
-    const allUsers = await userCollection.find();
-
-    if(allUsers.length == 0){
-        return res.status(404).send("No user found.");
-    }
-
-    res.json(allUsers);
-});
-
-// Delete user by ID
-
-route.delete("/deleteuser-id/:id", async(req,res) =>{
-    const deletedUser = await userCollection.findByIdAndDelete(req.params.id);
-
-
-    if (!deletedUser){
-        return res.status(404).send("No user with such ID found.")
-    }
-
-    res.send("User deleted successfully.")
-});
-
-
+// route.use(isUserLoggedIn);
 
 
 

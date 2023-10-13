@@ -31,13 +31,15 @@ route.get("/use-id/:id", async(req, res) =>{
     res.json(getItemInShopById);
 });
 
-route.use(isUserLoggedIn);
+
+
+// route.use(isUserLoggedIn);
 route.use(adminsOnly);
 
 
 // adding items to the shop
 
-route.post("/", async(req, res) =>{
+route.post("/",adminsOnly, async(req, res) =>{
     const newShopItem = await shopItemsCollection.create({
         name: req.body.name,
         description: req.body.description,
@@ -83,9 +85,9 @@ route.delete("/remove-id/:id", async(req,res) =>{
 
 // route to find all shop items irrespective of role
 
-route.get("/admin/all-tasks", adminsOnly, async(req,res) =>{
-    const shopItems = await shopItemsCollection.find();
-    res.send(shopItems);
+route.get("/users", adminsOnly, async(req,res) =>{
+    const users = await userCollection.find();
+    res.send(users);
 });
 
 

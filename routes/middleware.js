@@ -20,7 +20,6 @@ function isUserLoggedIn( req, res, next){
 
     if(tokenType == "Bearer"){
         const decoded = jwt.verify(tokenValue, process.env.SECRET);
-        // console.log(decoded);
         req.decoded = decoded;
         next();
         return;
@@ -30,11 +29,15 @@ function isUserLoggedIn( req, res, next){
 };
 
 function adminsOnly(req, res, next){
-    if (req.decoded.role == "admin"){
-        next();
-    } else {
-        res.status(401).send("You are not an admin.");
+
+    try {
+        if (req.decoded.role == "admin"){
+            next();
+        }         
+    } catch (error) {
+        res.status(403).send("action-not-allowed");
     }
+    
 
 };
 

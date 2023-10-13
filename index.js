@@ -4,7 +4,7 @@ const env = require('dotenv').config();
 const shopItemsRoute = require('./routes/shopItemsRoute');
 const authRoute = require('./routes/authRoute');
 const {shopItemsCollection} = require('./schemas/shopItemsSchema');
-const {isUserLoggedIn} = require('./routes/middleware');
+const {isUserLoggedIn,adminsOnly} = require('./routes/middleware');
 
 
 
@@ -14,10 +14,11 @@ const port = process.env.PORT || 8000
 
 //middleware
 app.use(express.json());
-
-app.use("/", shopItemsRoute);
+app.use(express.urlencoded({extended: false}));
 app.use("/auth", authRoute);
+app.use("/", shopItemsRoute);
 app.use(isUserLoggedIn);
+//app.use(adminsOnly);
 
 //connecting to database
 
